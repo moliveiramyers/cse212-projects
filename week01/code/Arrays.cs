@@ -41,10 +41,12 @@ public static class Arrays
         // be implemented by another person.
 
 
-
-        List<int> firstSlice = data.GetRange(data.Count - amount, amount);
+    //I first created a list to add the part of the list that will move to the begining
+        List<int> lastSlice = data.GetRange(data.Count - amount, amount);
+    //then I deleted it from the main list
         data.RemoveRange(data.Count - amount, amount);
-        data.InsertRange(0, firstSlice);
+    //at last I inserted the numbers on the right side that were removed and added to the lastSlice in the begining of the data list
+        data.InsertRange(0, lastSlice);
 
     }
 }

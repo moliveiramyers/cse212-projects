@@ -1,5 +1,8 @@
+
 public static class Arrays
 {
+
+
     /// <summary>
     /// This function will produce an array of size 'length' starting with 'number' followed by multiples of 'number'.  For 
     /// example, MultiplesOf(7, 5) will result in: {7, 14, 21, 28, 35}.  Assume that length is a positive
@@ -8,12 +11,19 @@ public static class Arrays
     /// <returns>array of doubles that are the multiples of the supplied number</returns>
     public static double[] MultiplesOf(double number, int length)
     {
-        // TODO Problem 1 Start
-        // Remember: Using comments in your program, write down your process for solving this problem
-        // step by step before you write the code. The plan should be clear enough that it could
-        // be implemented by another person.
 
-        return []; // replace this return statement with your own
+
+        //first step is to create an Array that will hold the multiples including the number
+        double[] multiples = new double[length];
+
+        //second step is to create a foreach loop that will iterete starting from one to and including the length number
+        for (int i = 1; i <= length; ++i)
+        {
+            //third step is to add it to the list each time it was we multiple by the i until it gets to length.
+            multiples[i - 1] = number * i;
+        }
+
+        return multiples; // replace this return statement with your own
     }
 
     /// <summary>
@@ -29,5 +39,12 @@ public static class Arrays
         // Remember: Using comments in your program, write down your process for solving this problem
         // step by step before you write the code. The plan should be clear enough that it could
         // be implemented by another person.
+
+
+
+        List<int> firstSlice = data.GetRange(data.Count - amount, amount);
+        data.RemoveRange(data.Count - amount, amount);
+        data.InsertRange(0, firstSlice);
+
     }
 }

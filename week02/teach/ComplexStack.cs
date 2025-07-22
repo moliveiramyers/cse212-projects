@@ -2,7 +2,7 @@
     public static bool DoSomethingComplicated(string line) {
         var stack = new Stack<char>();
         foreach (var item in line) {
-            if (item is '(' or '[' or '{') {
+            if (item == '(' || item == '[' || item == '{') {
                 stack.Push(item);
             }
             else if (item is ')') {

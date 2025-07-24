@@ -21,8 +21,22 @@ public static class SetsAndMaps
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     public static string[] FindPairs(string[] words)
     {
+        var pairs = new List<string>();
+        var seen = new HashSet<string>();
+        var wordSet = new HashSet<string>(words);
+
+        foreach (var word in words)
+        {
+            string matchWord = new string(word.Reverse().ToArray());
+            if (wordSet.Contains(matchWord) && word != matchWord && !seen.Contains(word) && !seen.Contains(matchWord))
+            {
+                pairs.Add($"{matchWord} & {word}");
+                seen.Add(word);
+                seen.Add(matchWord);
+            }
+        }
         // TODO Problem 1 - ADD YOUR CODE HERE
-        return [];
+        return pairs.ToArray();
     }
 
     /// <summary>
@@ -43,8 +57,17 @@ public static class SetsAndMaps
         {
             var fields = line.Split(",");
             // TODO Problem 2 - ADD YOUR CODE HERE
-        }
+            var degree = fields[3];
 
+            if (degrees.ContainsKey(degree))
+            {
+                degrees[degree]++;
+            }
+            else
+            {
+                degrees[degree] = 1;
+            }
+        }
         return degrees;
     }
 
@@ -67,7 +90,61 @@ public static class SetsAndMaps
     public static bool IsAnagram(string word1, string word2)
     {
         // TODO Problem 3 - ADD YOUR CODE HERE
-        return false;
+        var dic = new Dictionary<char, int>();
+        var word1NoSpace = word1.Replace(" ", "");
+        var word2NoSpace = word2.Replace(" ", "");
+
+        if (word1NoSpace.Length != word2NoSpace.Length)
+        {
+            return false;
+        }
+        word1NoSpace = word1NoSpace.ToLower();
+        word2NoSpace = word2NoSpace.ToLower();
+        foreach (var letter in word1NoSpace)
+        {
+            if (dic.ContainsKey(letter))
+            {
+                dic[letter]++;
+            }
+            else
+            {
+                dic[letter] = 1;
+            }
+        }
+        foreach (var letter in word2NoSpace)
+        {
+            if (!dic.ContainsKey(letter))
+            {
+                return false;
+            }
+            else
+            {
+                dic[letter]--;
+            }
+            if (dic[letter] < 0)
+            {
+                return false;
+            }
+        }
+
+        foreach (var value in dic.Values)
+        {
+            if (value != 0)
+            {
+                return false;
+            }
+        }
+
+        // for (var i = 0; i < word1.Length; i++)
+        //     {
+        //         var letterChecker = word1[i];
+        //         if (word2.Contains(letterChecker)) return true;
+        //     }
+        // if (allMatch)
+        // {
+        //     dic[word1] = word2;
+        // }
+        return true;
     }
 
     /// <summary>

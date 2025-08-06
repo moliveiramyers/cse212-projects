@@ -14,8 +14,19 @@ public static class Recursion
     /// </summary>
     public static int SumSquaresRecursive(int n)
     {
+
+
         // TODO Start Problem 1
-        return 0;
+        // smaller problem
+        if (n <= 0)
+        {
+            return 0;
+        }
+        // base case
+        else
+        {
+            return n * n + SumSquaresRecursive(n - 1);
+        }
     }
 
     /// <summary>
@@ -31,7 +42,7 @@ public static class Recursion
     /// using the formula: len(letters)! / (len(letters) - size)!
     ///
     /// For example, if letters was [A,B,C] and size was 2 then
-    /// the following would the contents of the results array after the function ran: AB, AC, BA, BC, CA, CB (might be in 
+    /// the following would the contents of the results array after the function ran : AB, AC, BA, BC, CA, CB (might be in 
     /// a different order).
     ///
     /// You can assume that the size specified is always valid (between 1 
@@ -40,6 +51,21 @@ public static class Recursion
     public static void PermutationsChoose(List<string> results, string letters, int size, string word = "")
     {
         // TODO Start Problem 2
+        if (word.Length == size)
+        {
+            results.Add(word);
+            return;
+        }
+        else
+        {
+            for (int i = 0; i < letters.Length; i++)
+            {
+                var currentLetter = letters[i];
+                var leftLetters = letters.Remove(i, 1);
+                PermutationsChoose(results, leftLetters, size, word + currentLetter);
+            }
+        }
+
     }
 
     /// <summary>
@@ -86,6 +112,10 @@ public static class Recursion
     /// </summary>
     public static decimal CountWaysToClimb(int s, Dictionary<int, decimal>? remember = null)
     {
+        if (remember == null)
+        {
+            remember = new Dictionary<int, decimal>();
+        }
         // Base Cases
         if (s == 0)
             return 0;
@@ -95,11 +125,18 @@ public static class Recursion
             return 2;
         if (s == 3)
             return 4;
-
         // TODO Start Problem 3
 
         // Solve using recursion
-        decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        // decimal ways = CountWaysToClimb(s - 1) + CountWaysToClimb(s - 2) + CountWaysToClimb(s - 3);
+        if (remember?.ContainsKey(s) == true)
+        {
+            return remember[s];
+        }
+        decimal ways = CountWaysToClimb(s - 1, remember) + CountWaysToClimb(s - 2, remember) + CountWaysToClimb(s - 3, remember);
+
+        remember[s] = ways;
+
         return ways;
     }
 
@@ -119,6 +156,22 @@ public static class Recursion
     public static void WildcardBinary(string pattern, List<string> results)
     {
         // TODO Start Problem 4
+        char asterisk = '*';
+        int index = pattern.IndexOf(asterisk);
+
+        if (index != -1)
+        {
+            var wildcardCount = pattern.Count(c => c == asterisk);
+
+            WildcardBinary(pattern.Substring(0, index) + 0 + pattern.Substring(index + 1), results);
+            WildcardBinary(pattern.Substring(0, index) + 1 + pattern.Substring(index + 1), results);
+
+        }
+        else
+        {
+            results.Add(pattern);
+        }
+
     }
 
     /// <summary>
@@ -129,15 +182,28 @@ public static class Recursion
     {
         // If this is the first time running the function, then we need
         // to initialize the currPath list.
-        if (currPath == null) {
+        if (currPath == null)
+        {
             currPath = new List<ValueTuple<int, int>>();
         }
-        
-        // currPath.Add((1,2)); // Use this syntax to add to the current path
+        if (!maze.IsValidMove(currPath, x, y))
+            return;
+        currPath.Add((x, y)); // Use this syntax to add to the current path
 
         // TODO Start Problem 5
         // ADD CODE HERE
+        if (maze.IsEnd(x, y))
+        {
+            results.Add(currPath.AsString());
+            currPath.RemoveAt(currPath.Count - 1); // backtrack
+            return;
+        }
 
-        // results.Add(currPath.AsString()); // Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
+        SolveMaze(results, maze, x + 1, y, currPath);
+        SolveMaze(results, maze, x, y + 1, currPath);
+        SolveMaze(results, maze, x - 1, y, currPath);
+        SolveMaze(results, maze, x, y - 1, currPath);
+
+        currPath.RemoveAt(currPath.Count - 1);// Use this to add your path to the results array keeping track of complete maze solutions when you find the solution.
     }
 }
